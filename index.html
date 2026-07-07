@@ -89,6 +89,7 @@
   .field.hl{background:#fffdf0;border-color:#e9e2a8}
   .field.selb{background:var(--sel-bg);border-color:#cdd6f7}
   .frow{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:center}
+  .frow2{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:center}
   .card-illus{width:56px;height:38px;border-radius:6px;background:#eceef2;display:flex;align-items:center;justify-content:center;font-size:9px;color:#777;font-family:monospace}
   .form-h{font-weight:700;font-size:16px;margin:4px 0 12px}
   .savecard{display:flex;align-items:center;gap:10px;font-size:14px;color:#333;margin:4px 0 16px}
@@ -338,9 +339,8 @@ function ipBody(cfg,m){
     <div class="cc-wrap"><input class="field" placeholder="${L.ccnum}" value="4111 1111 1111 1111"><span class="visa cc-badge">VISA</span></div>
     <input class="field" placeholder="${L.ccname}">
     <input class="field" placeholder="${L.ccdoc}">
-    <div class="frow">
-      <select class="field selb"><option>${L.mm}</option><option selected>Março</option></select>
-      <select class="field selb"><option>${L.yy}</option><option selected>2030</option></select>
+    <div class="frow2">
+      <input class="field" placeholder="Validade (MM/AA)" value="03/30">
       <input class="field" placeholder="${L.cvv}" value="123">
       <div class="card-illus">010101 <span style="color:#c00;border:1px solid #c00;border-radius:2px;padding:0 2px">123</span></div>
     </div>
