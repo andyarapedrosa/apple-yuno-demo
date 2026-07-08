@@ -249,7 +249,7 @@ function cardBody(cfg){
 function methodBox(cfg,m){
   const sel=m.id===apSelected;
   const head = m.kind==='wallet'
-    ? `<div class="applepay"><span class="g"></span>Pay</div>`
+    ? `<img src="apple-pay.png" alt="Apple Pay" style="height:40px;width:auto;display:block">`
     : `<div class="t">${m.name}</div>${m.sub?`<div class="s${m.green?' green':''}">${m.sub}</div>`:''}`;
   const leftBody = m.kind==='card' ? cardBody(cfg) : '';
   const note = m.kind==='card' ? (cfg.L.splitNote||'') : (cfg.notes[m.id]||'');
