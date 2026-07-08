@@ -80,6 +80,10 @@
   .addrgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .addr-text{font-size:16px;line-height:1.62;color:var(--ink);white-space:pre-line;margin-bottom:4px}
   .ap-cpf{font-size:15px;font-weight:600;margin:6px 0}
+  .cl-hint{font-size:15px;color:#333;margin:-6px 0 14px}
+  .giftcard>div{font-size:16px;margin-bottom:8px}
+  .doc-fields{background:#f5f5f7;border-radius:12px;padding:16px;margin:10px 0 0;max-width:540px}
+  .doc-fields .field:last-child{margin-bottom:0}
   .ap-divider{border-top:1px solid var(--line);margin:26px 0}
 
   .apcta{background:var(--blue);color:#fff;border:0;border-radius:12px;padding:15px 34px;font-size:17px;font-weight:500;width:100%;max-width:540px}
@@ -140,6 +144,7 @@
   <span class="lbl">Demo · País</span>
   <button class="ctab on" data-c="BR" onclick="setCountry('BR')">🇧🇷 Brasil</button>
   <button class="ctab" data-c="MX" onclick="setCountry('MX')">🇲🇽 México</button>
+  <button class="ctab" data-c="CL" onclick="setCountry('CL')">🇨🇱 Chile</button>
 </div></div>
 
 <div id="app"></div>
@@ -221,6 +226,35 @@ const CFG={
        faqH:'Preguntas frecuentes de pago',
        sub:'Subtotal', ship:'Envíos', shipV:'GRATIS', total:'Tu total', item:'1 artículo', editBag:'Editar la bolsa',
        details:'Detalles de tu pedido', deliv:'Entrega en:', change:'Cambiar', to:'Entregar a:', payL:'Pago', rev:'Revisión', see:'Ver',
+       proc:'Procesando el pago…', procS:'Yuno está enrutando al mejor proveedor.',
+       d3:'Verificación 3DS', d3s:'Ingresa el código enviado por SMS por tu banco emisor.', d3b:'Confirmar',
+       pxt:'', pxp:'', pxb:'',
+       okt:'¡Gracias por tu compra!', okp:'Recibirás la confirmación de tu pedido por correo.', okb:'Seguir comprando' } },
+
+ CL:{ lang:'es', layout:'cl', total:'$3.899.980',
+   sumLabel:'Mostrar resumen del pedido:', ivaNote:'Incluye IVA (19%).',
+   issuer:'Autenticación del banco',
+   nav:['Tienda','Mac','iPad','iPhone','Watch','AirPods','TV y Casa','Entretenimiento','Accesorios','Soporte'],
+   methods:[
+     {id:'CARD',        name:'Tarjeta de crédito o débito', sub:'Visa, Mastercard, AMEX, Discover, Diners Club', kind:'card', section:'contado'},
+     {id:'MP',          name:'Mercado Pago', sub:'Paga con tu cuenta o saldo', kind:'redirect', section:'contado'},
+     {id:'KHIPU',       name:'Transferencia bancaria (Khipu)', sub:'Paga desde tu banco', kind:'redirect', section:'contado'},
+     {id:'C2P',         name:'Click to Pay', sub:'Paga más rápido con tus tarjetas guardadas', kind:'redirect', section:'contado'},
+     {id:'APPLEPAY',    name:'Apple Pay', kind:'wallet', section:'contado'},
+     {id:'INSTALLMENTS',name:'Pago en cuotas con tarjeta de crédito', sub:'Paga hasta en 24 cuotas sin interés.', kind:'card', section:'cuotas'},
+   ],
+   notes:{
+     MP:'You\'ll be redirected to <b>Mercado Pago</b> to authorize the payment securely.',
+     KHIPU:'You\'ll be redirected to your bank via <b>Khipu</b> to authorize the transfer. Confirmed once the transfer clears.',
+     C2P:'Pay faster with <b>Click to Pay</b> using your saved cards across Visa, Mastercard and AMEX.',
+     APPLEPAY:'Complete the payment with Touch ID, Face ID, or your device passcode.',
+   },
+   L:{ payQ:'¿Cómo quieres pagar?',
+       cardInfo:'Ingresa la información de tu tarjeta:', ccnum:'Número de tarjeta', exp:'Fecha de vencimiento MM/AA', cvv:'CVV',
+       revisar:'Revisar pedido', helpLine:'¿Necesitas más ayuda? <a href="#">Chatea ahora</a> o llama al 800 361 800.',
+       faqH:'Preguntas frecuentes de pago',
+       sub:'Subtotal', ship:'Envío', shipV:'GRATIS', total:'Tu total', item:'1 artículo', editBag:'Editar la bolsa',
+       details:'Detalles de tu pedido', deliv:'Entrega el:', change:'Cambiar', to:'Enviar a:', payL:'Pago', rev:'Revisión', see:'Ver',
        proc:'Procesando el pago…', procS:'Yuno está enrutando al mejor proveedor.',
        d3:'Verificación 3DS', d3s:'Ingresa el código enviado por SMS por tu banco emisor.', d3b:'Confirmar',
        pxt:'', pxp:'', pxb:'',
@@ -330,8 +364,114 @@ function footerMX(){
     <div class="apf-legal"><span>Copyright © 2026 Apple Inc. Todos los derechos reservados. · <a href="#">Política de privacidad</a> | <a href="#">Condiciones de venta</a> | <a href="#">Aviso legal</a></span><span>México</span></div>
   </div></footer>`;
 }
+function footerCL(){
+  return `<footer class="apf"><div class="wrap">
+    <div>Apple utiliza el cifrado estándar del sector para proteger la confidencialidad de tus datos personales.</div>
+    <div>Otras formas de comprar: <a href="#">encuentra una Apple Store</a> o un <a href="#">distribuidor Apple</a>. O llama al 800 361 800.</div>
+    <div class="apf-legal"><span>Copyright © 2026 Apple Inc. Todos los derechos reservados. · <a href="#">Política de privacidad</a> | <a href="#">Condiciones de venta</a> | <a href="#">Aviso legal</a></span><span>Chile</span></div>
+  </div></footer>`;
+}
+
+/* ---------- Chile (Apple.com/cl) ---------- */
+function cardFieldsCL(cfg){
+  return `
+    <div class="ap-lbl">${cfg.L.cardInfo}</div>
+    <div class="cc-wrap"><input class="field" placeholder="${cfg.L.ccnum}"><span class="visa cc-badge">VISA</span></div>
+    <div class="cardrow"><input class="field" placeholder="${cfg.L.exp}"><div class="cvvwrap"><input class="field" placeholder="${cfg.L.cvv}"><span class="help-ic">?</span></div></div>`;
+}
+function billingCL(){
+  return `
+    <div class="sec-h" style="font-size:16px">Dirección de facturación</div>
+    <label class="ap-check"><input type="checkbox" checked> Usar mi dirección de envío.</label>
+    <div class="addr-text">Andyara Pedrosa
+Av. Providencia 1234
+Providencia
+Santiago, Región Metropolitana
+Chile</div>`;
+}
+function methodBoxCL(cfg,m){
+  const sel=m.id===apSelected;
+  const head = m.kind==='wallet'
+    ? `<img src="apple-pay.png" alt="Apple Pay" style="height:52px;width:auto;display:block">`
+    : `<div class="t">${m.name}</div>${m.sub?`<div class="s">${m.sub}</div>`:''}`;
+  let leftBody='';
+  if(m.kind==='card'){
+    const cuotasSel = m.id==='INSTALLMENTS' ? `<div class="ap-lbl">Número de cuotas:</div><select class="field"><option>Selecciona el número de cuotas</option><option>3 cuotas sin interés</option><option>6 cuotas sin interés</option><option>12 cuotas sin interés</option><option>24 cuotas sin interés</option></select>` : '';
+    leftBody = cardFieldsCL(cfg) + cuotasSel + billingCL();
+  }
+  const note = m.kind==='card' ? '' : (cfg.notes[m.id]||'');
+  return `
+    <div class="m-row">
+      <div class="m-left">
+        <div class="ap-box ${m.kind==='wallet'?'wallet':''}${sel?' on':''}" data-m="${m.id}" onclick="pickAp('${m.id}')">${head}</div>
+        ${leftBody?`<div class="mcontent${sel?' on':''}" id="mc-${m.id}">${leftBody}</div>`:''}
+      </div>
+      <div class="mnote${sel?' on':''}" id="note-${m.id}">${note}</div>
+    </div>`;
+}
+function drawerCL(cfg){
+  const L=cfg.L;
+  return `
+  <div class="drawer-bg" id="drawerBg" onclick="closeSummary()"></div>
+  <aside class="drawer" id="drawer">
+    <button class="x" onclick="closeSummary()">✕</button>
+    <h3>Total de tu pedido</h3><div class="hr"></div>
+    <div class="row"><span>${L.item}</span><a href="#">${L.editBag}</a></div><div class="hr"></div>
+    <div class="row"><span>${L.sub}</span><span id="drawerSub">${cfg.total}</span></div>
+    <div class="row"><span>${L.ship}</span><span>${L.shipV}</span></div><div class="hr"></div>
+    <div class="tot"><span>${L.total}</span><span id="drawerTot">${cfg.total}</span></div>
+    <div class="dvat">${cfg.ivaNote}</div>
+    <h4>${L.details}</h4>
+    <div class="det"><div class="h"><span>${L.deliv}</span><a href="#">${L.change}</a></div><div class="v">Lun 13 Jul</div></div>
+    <div class="det"><div class="h"><span>${L.to}</span><a href="#">${L.change}</a></div><div class="v">Av. Providencia 1234</div></div>
+    <div class="det"><div class="h"><span>${L.payL}</span></div></div>
+    <div class="det" style="border-bottom:0"><div class="h"><span>${L.rev}</span><a href="#">${L.see}</a></div></div>
+  </aside>`;
+}
+function renderAppleCL(cfg){
+  const L=cfg.L;
+  const contado=cfg.methods.filter(m=>m.section==='contado');
+  const cuotas=cfg.methods.filter(m=>m.section==='cuotas');
+  return `
+  <div class="apnav"><div class="wrap">
+    <span class="apple"></span>
+    ${cfg.nav.map(n=>`<a href="#">${n}</a>`).join('')}
+    <span class="sp"></span><a href="#">⌕</a><a href="#">▢</a>
+  </div></div>
+  <div class="wrap"><div class="payhead"><h2>Pagar</h2><a id="sumLink" href="#" onclick="openSummary();return false">${cfg.sumLabel} ${cfg.total}</a></div></div>
+  <div class="wrap"><div class="checkout">
+    <h1 class="big">${L.payQ}</h1>
+    <div class="sec-h" style="font-size:24px">Pagar al contado</div>
+    ${contado.map(m=>methodBoxCL(cfg,m)).join('')}
+    <div class="sec-h" style="font-size:24px">Pagar en cuotas</div>
+    <div class="cl-hint">Ingresa tu tarjeta de crédito para revisar la información. <a href="#">Más información ⊕</a></div>
+    ${cuotas.map(m=>methodBoxCL(cfg,m)).join('')}
+    <div class="ap-divider"></div>
+    <div class="m-row">
+      <div class="m-left"><div class="giftcard"><div>Agrega una Gift Card de Apple:</div><a class="ap-link" href="#">Ingresa el número de tu Gift Card ⌄</a></div></div>
+      <div class="mnote on">Puedes usar hasta 8 Gift Cards del Apple Store. Las Gift Cards del Apple Store no se pueden usar para pagar en cuotas con tarjeta de crédito.</div>
+    </div>
+    <div class="ap-divider"></div>
+    <div class="leftcol">
+      <div class="sec-h" style="font-size:24px">¿Quieres factura o boleta?</div>
+      <div class="ap-box on" data-doc="BOLETA" onclick="pickDoc(this)"><div class="t">Boleta</div></div>
+      <div class="doc-fields" id="doc-BOLETA"><input class="field" placeholder="RUT:"><div class="field-wrap"><span class="flab">Nombre:</span><input class="field flab-pad" value="Andyara Pedrosa"></div></div>
+      <div class="ap-box" data-doc="FACTURA" onclick="pickDoc(this)" style="margin-top:12px"><div class="t">Factura</div></div>
+      <div class="doc-fields" id="doc-FACTURA" style="display:none"><input class="field" placeholder="RUT empresa:"><input class="field" placeholder="Razón social:"><input class="field" placeholder="Giro:"></div>
+    </div>
+    <div style="margin-top:26px"><button class="apcta" onclick="pay()">${L.revisar}</button></div>
+    <div class="help-line">${L.helpLine}</div>
+    <div class="faq" id="faq">
+      <div class="q" onclick="document.getElementById('faq').classList.toggle('open')"><h3>${L.faqH}</h3><span class="chev">⌄</span></div>
+      <div class="a"><p><b>¿Qué métodos de pago aceptan?</b><br>Tarjeta de crédito o débito y pago en cuotas — y ahora también Mercado Pago, transferencia (Khipu), Click to Pay y Apple Pay.</p><p style="margin-top:10px"><b>¿Puedo pagar en cuotas sin interés?</b><br>Sí, hasta en 24 cuotas sin interés con tarjetas participantes.</p></div>
+    </div>
+  </div></div>
+  ${footerCL()}
+  ${drawerCL(cfg)}`;
+}
 
 function renderApple(cfg){
+  if(cfg.layout==='cl') return renderAppleCL(cfg);
   const L=cfg.L;
   return `
   <div class="apnav"><div class="wrap">
@@ -389,7 +529,10 @@ function pickAp(id){
   const link=$('sumLink'); if(link) link.textContent=apCfg.sumLabel+' '+t;
   ['drawerSub','drawerTot'].forEach(k=>{const e=$(k); if(e) e.textContent=t;});
 }
-function pickCfdi(el){ document.querySelectorAll('.checkout .ap-box:not([data-m])').forEach(b=>b.classList.remove('on')); el.classList.add('on'); }
+function pickCfdi(el){ document.querySelectorAll('.checkout .ap-box:not([data-m]):not([data-doc])').forEach(b=>b.classList.remove('on')); el.classList.add('on'); }
+function pickDoc(el){ const doc=el.dataset.doc;
+  document.querySelectorAll('.ap-box[data-doc]').forEach(b=>b.classList.toggle('on',b.dataset.doc===doc));
+  ['BOLETA','FACTURA'].forEach(d=>{const f=$('doc-'+d); if(f) f.style.display=(d===doc)?'block':'none';}); }
 function toggleBRAddr(cb){ $('brAddrText').style.display=cb.checked?'block':'none'; $('brAddrForm').style.display=cb.checked?'none':'block'; }
 function openSummary(){ $('drawer').classList.add('show'); $('drawerBg').classList.add('show'); }
 function closeSummary(){ $('drawer').classList.remove('show'); $('drawerBg').classList.remove('show'); }
