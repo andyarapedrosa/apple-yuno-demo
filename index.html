@@ -1,83 +1,211 @@
 <!DOCTYPE html>
-<html lang="es-MX">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Apple México × Yuno — Checkout Demo (SDK Lite)</title>
+<title>Apple / iPlace × Yuno — Checkout Demo (SDK Lite)</title>
 <style>
   :root{
-    --blue:#0071E3; --blue-h:#0064c9; --ink:#1d1d1f; --muted:#6e6e73;
-    --line:#d2d2d7; --nav:#f5f5f7; --green:#1f9d3a;
-    --font:'SF Pro Text','SF Pro Display',-apple-system,BlinkMacSystemFont,'Helvetica Neue','Segoe UI',Arial,sans-serif;
+    /* iPlace (BR) */
+    --lime:#C3D82E; --ip-blue:#2E5CE6; --ip-blue-h:#2749c9; --sel-bg:#EEF1FC; --logo-lime:#A4C400;
+    /* Apple (MX/CL) */
+    --ap-blue:#0071E3; --ap-blue-h:#0064c9; --ap-ink:#1d1d1f; --ap-nav:#f5f5f7; --ap-line:#d2d2d7;
+    /* shared */
+    --panel:#F5F5F5; --green:#1F9D3A; --ink:#1A1A1A; --muted:#6B7280; --line:#E5E7EB;
+    --font-ip:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+    --font-ap:'SF Pro Text','SF Pro Display',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{overflow-x:hidden}
-  body{font-family:var(--font);color:var(--ink);background:#fff;line-height:1.45;-webkit-font-smoothing:antialiased}
-  a{color:var(--blue);text-decoration:none}
+  body{font-family:var(--font-ip);color:var(--ink);background:#fff;line-height:1.4;-webkit-font-smoothing:antialiased}
+  a{color:var(--ip-blue);text-decoration:none}
   button{cursor:pointer;font-family:inherit}
   .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
 
-  /* apple nav */
-  .apnav{background:rgba(250,250,252,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40}
-  .apnav .wrap{display:flex;align-items:center;gap:28px;height:44px;font-size:12px}
-  .apnav .apple{font-size:15px}
-  .apnav a{color:#1d1d1fcc;font-weight:400}
-  .apnav a:hover{color:#1d1d1f}
-  .apnav .sp{margin-left:auto}
+  /* country switcher (demo control) */
+  .ctabs{background:#0b0d16;border-bottom:1px solid #1c2030}
+  .ctabs .wrap{display:flex;gap:6px;align-items:center}
+  .ctabs .lbl{color:#7b8196;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-right:8px;padding:12px 0}
+  .ctab{border:0;background:transparent;padding:12px 16px;font-size:13px;font-weight:600;color:#9aa1b8;border-bottom:3px solid transparent;display:flex;gap:8px;align-items:center}
+  .ctab.on{color:#fff;border-bottom-color:#8b93ff}
+  .ctab .skin{font-size:10px;opacity:.6}
 
-  /* pay header */
-  .payhead{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding:22px 0}
-  .payhead h2{font-size:24px;font-weight:600}
-  .payhead a{font-size:15px}
+  /* ===== iPlace skin ===== */
+  .ip .promo{background:var(--lime);text-align:center;padding:11px;font-size:14px}
+  .ip .promo a{color:#1a1a1a;text-decoration:underline;font-weight:500}
+  .ip .hdr{border-bottom:1px solid var(--line)}
+  .ip .hdr .wrap{display:flex;align-items:center;gap:14px;padding:16px 24px}
+  .ip .logo{display:flex;align-items:center;font-weight:800;font-size:24px;letter-spacing:-.5px}
+  .ip .logo .ring{width:34px;height:34px;border-radius:50%;border:3px solid var(--logo-lime);display:flex;align-items:center;justify-content:center;font-size:22px;margin-right:3px}
+  .ip .partner{border:1px solid var(--line);border-radius:10px;padding:7px 12px;font-size:11px;font-weight:600;color:#1a1a1a;line-height:1.05;display:inline-flex;gap:7px;align-items:center}
+  .ip .partner .apple{font-size:17px;line-height:1}
+  .ip .partner .pp{text-align:left;line-height:1.05}
+  .ip .bag{margin-left:auto;width:26px;height:26px;color:var(--ip-blue)}
 
-  /* main single column */
-  .checkout{max-width:660px;padding:6px 0 60px}
-  h1.big{font-size:40px;font-weight:600;letter-spacing:-.02em;line-height:1.08;margin:34px 0 30px}
-  .sec-h{font-size:19px;font-weight:600;margin:34px 0 14px}
-  .sec-h .fin{font-size:14px;color:var(--blue);font-weight:400;margin-left:10px;white-space:nowrap}
+  /* ===== Apple skin ===== */
+  .ap{font-family:var(--font-ap);color:var(--ap-ink)}
+  .ap .apnav{background:rgba(250,250,252,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--ap-line)}
+  .ap .apnav .wrap{display:flex;align-items:center;gap:26px;height:44px;font-size:12px;color:#333}
+  .ap .apnav .apple{font-size:15px}
+  .ap .apnav a{color:#1d1d1fcc;font-weight:400}
+  .ap .apnav a:hover{color:#1d1d1f}
+  .ap .apnav .sp{margin-left:auto}
+  .ap .payhead{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--ap-line);padding:24px 0}
+  .ap .payhead h2{font-size:24px;font-weight:600}
+  .ap .payhead a{font-size:15px;color:var(--ap-blue)}
 
-  /* method boxes */
-  .ap-box{border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:12px;cursor:pointer;transition:box-shadow .12s,border-color .12s}
-  .ap-box.on{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue)}
+  /* checkout layout (both skins) */
+  .checkout{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:0;align-items:start}
+  @media (max-width:1000px){.checkout{grid-template-columns:1fr}}
+  .left{padding:34px 44px 60px 0}
+  @media (max-width:1000px){.left{padding:26px 0}}
+  .right{background:var(--panel);padding:34px 0 60px 38px}
+  .ap .right{background:#fff;border-left:1px solid var(--ap-line)}
+  @media (max-width:1000px){.right{padding:24px 0;margin-top:8px}}
+  .right-inner{max-width:360px}
+
+  h1.big{font-size:40px;font-weight:600;letter-spacing:-.02em;line-height:1.08;margin-bottom:26px}
+  .ip h1.big{font-size:26px;font-weight:700}
+
+  /* iPlace methods */
+  .methods{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .method{border-bottom:1px solid var(--line)}
+  .method:last-child{border-bottom:0}
+  .method .head{display:flex;align-items:center;gap:12px;padding:18px 20px;cursor:pointer}
+  .method.sel{background:#fff;box-shadow:inset 3px 0 0 var(--ip-blue), inset 0 0 0 1px rgba(46,92,230,.45)}
+  .method.sel .head{background:var(--sel-bg)}
+  .method.sel .m-body{background:#fff}
+  .radio{width:20px;height:20px;border-radius:50%;border:2px solid #c4c8cf;flex:0 0 auto;display:flex;align-items:center;justify-content:center}
+  .method.sel .radio{border-color:var(--ip-blue)}
+  .method.sel .radio::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--ip-blue)}
+  .m-name{font-weight:600;font-size:16px}
+  .m-sub{font-size:13px;color:var(--green);font-weight:600}
+  .m-body{display:none;padding:0 20px 22px}
+  .method.sel .m-body{display:block}
+
+  /* fields */
+  .field{width:100%;border:1px solid #d5d9e0;border-radius:10px;padding:15px 14px;font-size:15px;margin-bottom:12px;background:#fff;color:var(--ink);font-family:inherit}
+  .field::placeholder{color:#9aa0aa}
+  .field.hl{background:#fffdf0;border-color:#e9e2a8}
+  .field.selb{background:var(--sel-bg);border-color:#cdd6f7}
+  .frow{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:center}
+  .frow2{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:center}
+  .card-illus{width:56px;height:38px;border-radius:6px;background:#eceef2;display:flex;align-items:center;justify-content:center;font-size:9px;color:#777;font-family:monospace}
+  .form-h{font-weight:700;font-size:16px;margin:4px 0 12px}
+  .savecard{display:flex;align-items:center;gap:10px;font-size:14px;color:#333;margin:4px 0 16px}
+  .visa{font-weight:800;font-style:italic;color:#1a1f71;font-size:15px}
+
+  /* Apple payment blocks */
+  .ap .sec-h{font-size:19px;font-weight:600;margin:30px 0 14px}
+  .ap .sec-h .fin{font-size:14px;color:var(--ap-blue);font-weight:400;margin-left:10px}
+  .ap-box{border:1px solid var(--ap-line);border-radius:12px;padding:18px 20px;margin-bottom:14px;cursor:pointer}
+  .ap-box.on{border-color:var(--ap-blue);box-shadow:0 0 0 1px var(--ap-blue)}
   .ap-box .t{font-weight:600;font-size:16px}
   .ap-box .s{font-size:13px;color:var(--muted);margin-top:2px}
-  .ap-box .brands{margin-left:auto}
+  .ap-lbl{font-size:15px;color:#333;margin:16px 0 8px}
+  .ap-cardrow{display:grid;grid-template-columns:1fr 165px;gap:12px}
+  .ap-check{display:flex;align-items:center;gap:10px;font-size:15px;margin:8px 0 12px}
+  .ap-addr{font-size:14px;color:#333;line-height:1.6;white-space:pre-line}
+  .ap-cta{background:var(--ap-blue);color:#fff;border:0;border-radius:12px;padding:15px 34px;font-size:17px;font-weight:500}
+  .ap-cta:hover{background:var(--ap-blue-h)}
+  .ap-cta.full{width:100%}
+  /* MX additions */
+  .ap .field{border-color:var(--ap-line);border-radius:12px;font-size:16px;padding:15px 16px}
+  .ap .field::placeholder{color:#86868b}
   .ap-box .top{display:flex;align-items:center;gap:12px}
-  .ap-box .top .mtxt{flex:1;min-width:0}
-
-  .mcontent{display:none;margin:2px 0 20px}
+  .mcontent{display:none;margin:2px 0 16px}
   .mcontent.on{display:block}
-  .ap-lbl{font-size:15px;color:#333;margin:8px 0 8px}
-  .field{width:100%;border:1px solid var(--line);border-radius:12px;padding:15px 16px;font-size:16px;font-family:inherit;background:#fff;color:var(--ink);margin-bottom:12px}
-  .field::placeholder{color:#86868b}
-  .field.lbl{padding-top:22px;padding-bottom:8px}
+  .ap-divider{border-top:1px solid var(--ap-line);margin:26px 0}
   .field-wrap{position:relative;margin-bottom:12px}
   .field-wrap .flab{position:absolute;top:9px;left:16px;font-size:11px;color:var(--muted)}
   .field-wrap .field{margin-bottom:0}
-  .cardrow{display:grid;grid-template-columns:1fr 165px;gap:12px}
-  .cvvwrap{display:flex;align-items:center;gap:10px}
-  .cvvwrap .field{margin-bottom:0}
-  .help-ic{width:24px;height:24px;border-radius:50%;background:#6e6e73;color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-  select.field{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' fill='none' stroke='%236e6e73' stroke-width='1.6'/></svg>");background-repeat:no-repeat;background-position:right 16px center;padding-right:38px}
-  .note-box{font-size:14.5px;color:#333;line-height:1.6;padding:2px 2px 4px}
-  .note-box b{font-weight:600}
-
-  .divider{border-top:1px solid var(--line);margin:26px 0}
-  .apcta{background:var(--blue);color:#fff;border:0;border-radius:12px;padding:15px 34px;font-size:17px;font-weight:500;min-width:220px}
-  .apcta:hover{background:var(--blue-h)}
+  .field.flab-pad{padding-top:22px;padding-bottom:8px}
   .addrgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-
-  .help-line{font-size:15px;color:#333;padding:26px 0;border-top:1px solid var(--line);margin-top:30px}
-  .faq{border-top:1px solid var(--line)}
+  .ap-help{width:24px;height:24px;border-radius:50%;background:#6e6e73;color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .note-box{font-size:14.5px;color:#333;line-height:1.6;padding:2px 2px 6px}
+  .note-box b{font-weight:600}
+  .help-line{font-size:15px;color:#333;padding:26px 0;border-top:1px solid var(--ap-line);margin-top:30px}
+  .faq{border-top:1px solid var(--ap-line)}
   .faq .q{display:flex;justify-content:space-between;align-items:center;padding:22px 0;cursor:pointer}
   .faq .q h3{font-size:24px;font-weight:600}
   .faq .q .chev{transition:transform .2s;color:#6e6e73}
   .faq.open .q .chev{transform:rotate(180deg)}
   .faq .a{display:none;padding:0 0 20px;font-size:14.5px;color:#333;line-height:1.7}
   .faq.open .a{display:block}
-  footer{background:var(--nav);padding:22px 0 30px;font-size:12px;color:var(--muted);line-height:1.6}
+  .ap-footnote{border-top:1px solid var(--ap-line);margin-top:20px;padding:20px 0 0;font-size:12px;color:var(--muted);line-height:1.6}
+  select.ap-state{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' fill='none' stroke='%236e6e73' stroke-width='1.6'/></svg>");background-repeat:no-repeat;background-position:right 16px center;padding-right:38px}
 
-  /* drawer */
+  /* CTA iPlace */
+  .cta{width:100%;background:var(--ip-blue);color:#fff;border:0;border-radius:8px;padding:16px;font-size:16px;font-weight:600;letter-spacing:.2px;text-decoration:none}
+  .cta:hover{background:var(--ip-blue-h)}
+
+  /* order summary */
+  .sum-row{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid #e8e8e8}
+  .ap .sum-row{border-color:var(--ap-line)}
+  .sum-thumb{width:60px;height:60px;border-radius:10px;background:#fff;border:1px solid var(--line);position:relative;display:flex;align-items:center;justify-content:center;flex:0 0 auto;font-size:28px}
+  .sum-thumb .qty{position:absolute;top:-8px;left:-8px;width:22px;height:22px;border-radius:50%;background:#4b4b4b;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:600}
+  .sum-info{flex:1;min-width:0}
+  .sum-info .t{font-weight:600;font-size:15px}
+  .sum-info .d{font-size:12.5px;color:var(--muted);line-height:1.5}
+  .sum-info .d b{color:#333}
+  .sum-price{font-weight:600;font-size:15px;white-space:nowrap}
+  .coupon{display:flex;gap:10px;margin:16px 0}
+  .coupon input{flex:1;border:1px solid #d5d9e0;border-radius:10px;padding:13px 14px;font-size:14px}
+  .coupon button{border:0;background:#e6e7ea;color:#555;border-radius:10px;padding:0 22px;font-weight:600}
+  .totals .r{display:flex;justify-content:space-between;padding:7px 0;font-size:15px;color:#333}
+  .totals .grand{display:flex;justify-content:space-between;padding:14px 0 0;font-size:22px;font-weight:800;border-top:1px solid #e8e8e8;margin-top:6px}
+  .iva{font-size:12px;color:var(--muted);text-align:right;margin-top:4px}
+  .tradein{margin-top:18px;padding-top:16px;border-top:1px solid var(--ap-line);font-size:13px;color:#444;line-height:1.6}
+  .tradein b{display:block;font-size:15px;color:var(--ap-ink);margin-bottom:6px}
+
+  /* overlays (shared) */
+  .ov{position:fixed;inset:0;background:rgba(20,22,30,.55);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+  .ov.show{display:flex}
+  .modal{background:#fff;border-radius:18px;max-width:420px;width:92%;padding:34px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+  .spin{width:54px;height:54px;border:5px solid #e5e8f5;border-top-color:var(--ip-blue);border-radius:50%;margin:6px auto 18px;animation:sp 1s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .m-t{font-size:20px;font-weight:700;margin-bottom:6px}
+  .m-p{color:var(--muted);font-size:14px}
+  .issuer{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:700;color:#1a1f71;margin-bottom:14px;font-size:15px}
+  .otp{display:flex;gap:8px;justify-content:center;margin:18px 0}
+  .otp input{width:42px;height:52px;text-align:center;font-size:22px;border:1px solid #d5d9e0;border-radius:10px}
+  .success-ic{width:66px;height:66px;border-radius:50%;background:#e7f6ec;color:var(--green);display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 14px}
+  .m-btn{margin-top:20px;background:var(--ip-blue);color:#fff;border:0;border-radius:999px;padding:14px 30px;font-weight:700;font-size:15px}
+
+  /* Yuno sections */
+  .yuno-sec{padding:70px 0}
+  .yuno-sec.dark{background:#0b0d16;color:#fff}
+  .yuno-sec.light{background:#f7f8fb}
+  .eyebrow{text-align:center;font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--ip-blue)}
+  .dark .eyebrow{color:#8b93ff}
+  .yuno-h{text-align:center;font-size:clamp(24px,3.2vw,34px);font-weight:300;letter-spacing:-.02em;margin:12px 0 6px}
+  .yuno-h b{font-weight:700}
+  .yuno-sub{text-align:center;color:var(--muted);max-width:60ch;margin:0 auto 40px;font-size:15px}
+  .dark .yuno-sub{color:#9aa1b8}
+  .cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+  @media (max-width:980px){.cards{grid-template-columns:1fr 1fr}}
+  @media (max-width:560px){.cards{grid-template-columns:1fr}}
+  .rec{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:0 10px 30px rgba(20,22,40,.05)}
+  .rec .ic{width:44px;height:44px;border-radius:11px;background:var(--sel-bg);color:var(--ip-blue);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px}
+  .rec h3{font-size:16px;font-weight:700;margin-bottom:8px;line-height:1.25}
+  .rec p{font-size:13.5px;color:#4a5060;line-height:1.55}
+  .rec a{display:inline-block;margin-top:12px;font-size:12.5px;font-weight:600}
+  .steps{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+  .stp{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;border:1px solid #262a3d;background:#141726;border-radius:14px;padding:20px 22px}
+  .stp .n{width:34px;height:34px;border-radius:10px;background:#2a2f45;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+  .stp h4{font-size:16px;font-weight:700;margin-bottom:4px}
+  .stp .layer{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px;display:inline-block;margin-bottom:8px}
+  .L-front{background:rgba(70,199,214,.16);color:#46c7d6}.L-sdk{background:rgba(90,120,255,.16);color:#7b8cff}
+  .L-back{background:rgba(240,180,60,.16);color:#f0b43c}.L-yuno{background:rgba(60,200,120,.16);color:#3cc878}
+  .stp p{font-size:13.5px;color:#9aa1b8;line-height:1.55}
+  .stp code{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:#ffd28a}
+  .stp pre{background:#0a0c14;border:1px solid #262a3d;border-radius:10px;padding:12px 14px;margin-top:10px;overflow:auto;font-size:12px;color:#cdd3e6;line-height:1.6}
+  footer{padding:26px 0 46px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;line-height:1.6}
+  .badge-y{display:inline-flex;align-items:center;gap:8px;background:#141726;color:#fff;border-radius:999px;padding:8px 16px;font-size:12px;font-weight:600;position:fixed;bottom:18px;right:18px;z-index:50;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+  .badge-y b{color:#8b93ff}
+
+  /* Apple single-column checkout + slide-over summary drawer */
+  .ap-checkout{max-width:660px;padding:8px 0 70px}
   .drawer-bg{position:fixed;inset:0;background:rgba(0,0,0,.32);opacity:0;pointer-events:none;transition:opacity .25s;z-index:90}
   .drawer-bg.show{opacity:1;pointer-events:auto}
   .drawer{position:fixed;top:0;right:0;height:100%;width:430px;max-width:92%;background:#fff;box-shadow:-12px 0 44px rgba(0,0,0,.16);transform:translateX(100%);transition:transform .28s ease;z-index:91;padding:28px 30px 46px;overflow:auto}
@@ -85,198 +213,307 @@
   .drawer .x{position:absolute;top:20px;right:20px;width:34px;height:34px;border-radius:50%;background:#e8e8ed;border:0;font-size:15px;color:#333}
   .drawer h3{font-size:22px;font-weight:600;margin:2px 0 4px}
   .drawer h4{font-size:20px;font-weight:600;margin:26px 0 2px}
-  .drawer .hr{border-top:1px solid var(--line);margin:16px 0}
+  .drawer .hr{border-top:1px solid var(--ap-line);margin:16px 0}
   .drawer .row{display:flex;justify-content:space-between;font-size:15px;padding:6px 0;color:#333}
+  .drawer .row a,.drawer .det .h a{color:var(--ap-blue)}
   .drawer .tot{display:flex;justify-content:space-between;font-size:18px;font-weight:600;padding-top:2px}
   .drawer .dvat{font-size:12px;color:var(--muted);text-align:right;margin-top:2px}
-  .drawer .det{padding:14px 0;border-bottom:1px solid var(--line)}
+  .drawer .det{padding:14px 0;border-bottom:1px solid var(--ap-line)}
   .drawer .det .h{display:flex;justify-content:space-between;font-weight:600;font-size:15px}
   .drawer .det .h a{font-weight:400}
   .drawer .det .v{font-size:15px;color:#333;margin-top:5px}
 
-  /* overlays */
-  .ov{position:fixed;inset:0;background:rgba(20,22,30,.5);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
-  .ov.show{display:flex}
-  .modal{background:#fff;border-radius:18px;max-width:420px;width:92%;padding:34px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.35)}
-  .spin{width:54px;height:54px;border:5px solid #e5e8f5;border-top-color:var(--blue);border-radius:50%;margin:6px auto 18px;animation:sp 1s linear infinite}
-  @keyframes sp{to{transform:rotate(360deg)}}
-  .m-t{font-size:20px;font-weight:600;margin-bottom:6px}
-  .m-p{color:var(--muted);font-size:14px}
-  .issuer{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:700;color:#1a1f71;margin-bottom:14px;font-size:15px}
-  .otp{display:flex;gap:8px;justify-content:center;margin:18px 0}
-  .otp input{width:42px;height:52px;text-align:center;font-size:22px;border:1px solid var(--line);border-radius:10px}
-  .qr{width:170px;height:170px;margin:14px auto;border-radius:8px;background:repeating-conic-gradient(#111 0 25%,#fff 0 50%) 0 0/20px 20px}
-  .success-ic{width:66px;height:66px;border-radius:50%;background:#e7f6ec;color:var(--green);display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 14px}
-  .m-btn{margin-top:20px;background:var(--blue);color:#fff;border:0;border-radius:999px;padding:14px 30px;font-weight:600;font-size:15px}
-  .visa{font-weight:800;font-style:italic;color:#1a1f71;font-size:14px}
-
-  .badge-y{display:inline-flex;align-items:center;gap:7px;background:#141726;color:#fff;border-radius:999px;padding:7px 14px;font-size:11px;font-weight:600;position:fixed;bottom:16px;right:16px;z-index:50;box-shadow:0 10px 30px rgba(0,0,0,.25);opacity:.92}
-  .badge-y b{color:#8b93ff}
-  @media (max-width:560px){.addrgrid{grid-template-columns:1fr}.cardrow{grid-template-columns:1fr}}
+  /* card-field details */
+  .cc-wrap{position:relative}
+  .cc-wrap .field{padding-right:60px}
+  .cc-badge{position:absolute;right:14px;top:16px}
+  select.field{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%23777' stroke-width='1.6'/></svg>");background-repeat:no-repeat;background-position:right 14px center;padding-right:34px}
+  .ap-cvvwrap{display:flex;align-items:center;gap:10px}
+  .ap-cvvwrap .field{margin-bottom:0}
+  .ap-help{width:22px;height:22px;border-radius:50%;background:#6e6e73;color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
 </style>
 </head>
 <body>
 
-<!-- Apple nav -->
-<div class="apnav"><div class="wrap">
-  <span class="apple"></span>
-  <a href="#">Tienda</a><a href="#">Mac</a><a href="#">iPad</a><a href="#">iPhone</a><a href="#">Watch</a>
-  <a href="#">AirPods</a><a href="#">TV y Casa</a><a href="#">Entretenimiento</a><a href="#">Accesorios</a><a href="#">Soporte</a>
-  <span class="sp"></span><a href="#">⌕</a><a href="#">▢</a>
+<!-- demo country switcher -->
+<div class="ctabs"><div class="wrap">
+  <span class="lbl">Demo · country</span>
+  <button class="ctab on" data-c="BR" onclick="setCountry('BR')">🇧🇷 Brazil <span class="skin">· iPlace</span></button>
+  <button class="ctab" data-c="MX" onclick="setCountry('MX')">🇲🇽 Mexico <span class="skin">· Apple</span></button>
 </div></div>
 
-<div class="wrap"><div class="payhead"><h2>Pagar</h2>
-  <a href="#" onclick="openSummary();return false">Mostrar resumen de pedido: $97,997.00</a>
-</div></div>
+<!-- app chrome + checkout (rendered by JS) -->
+<div id="app"></div>
 
-<div class="wrap"><div class="checkout">
-  <h1 class="big">¿Cómo quieres pagar?</h1>
-
-  <div class="sec-h">Método de pago.<span class="fin">Compara las opciones de financiamiento ⊕</span></div>
-
-  <!-- payment methods -->
-  <div id="methods"></div>
-
-  <div class="divider"></div>
-
-  <!-- billing address -->
-  <div class="sec-h" style="font-size:19px">Dirección de facturación</div>
-  <div class="field-wrap"><span class="flab">País/región</span><input class="field lbl" value="México"></div>
-  <input class="field" placeholder="Nombre">
-  <input class="field" placeholder="Apellidos">
-  <input class="field" placeholder="Dirección (calle)">
-  <input class="field" placeholder="Depto, suite, código de acceso (opcional)">
-  <input class="field" placeholder="Colonia">
-  <input class="field" placeholder="Ciudad">
-  <div class="addrgrid">
-    <select class="field"><option>estado</option><option>Ciudad de México</option><option>Jalisco</option><option>Nuevo León</option><option>Estado de México</option><option>Puebla</option></select>
-    <input class="field" placeholder="Código postal">
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- CFDI -->
-  <div class="sec-h" style="font-size:24px">Facturación Electrónica.</div>
-  <div class="ap-box on" onclick="pickCfdi(this)"><div class="t">Sin CFDI</div><div class="s">Selecciona si no necesitas un CFDI para esta compra</div></div>
-  <div class="ap-box" onclick="pickCfdi(this)"><div class="t">CFDI</div><div class="s">Selecciona si sí necesitas un CFDI para esta compra</div></div>
-
-  <div style="margin-top:26px"><button class="apcta" onclick="pay()">Revisar tu pedido</button></div>
-
-  <div class="help-line">¿Necesitas más ayuda? <a href="#">Chatea ahora</a> o llama al 001-800-692-7753.</div>
-
-  <div class="faq" id="faq"><div class="q" onclick="document.getElementById('faq').classList.toggle('open')">
-      <h3>Preguntas frecuentes de pago</h3><span class="chev">⌄</span></div>
-    <div class="a">
-      <p><b>¿Qué métodos de pago aceptan?</b><br>Tarjeta de crédito o débito (Visa, MasterCard, AMEX), y ahora también Mercado Pago, OXXO, SPEI y Kueski Pay.</p>
-      <p style="margin-top:10px"><b>¿Puedo pagar en mensualidades sin intereses (MSI)?</b><br>Sí, con tarjetas participantes puedes elegir el número de pagos durante el checkout.</p>
-    </div>
-  </div>
-</div></div>
-
-<footer><div class="wrap">* Precios incluyen IVA (16%); no incluyen cargos de envío (salvo se indique lo contrario). El formulario del pedido muestra el IVA por pagar para los productos que selecciones.</div></footer>
-
-<div class="badge-y">Demo · powered by <b>yuno</b></div>
-
-<!-- drawer -->
-<div class="drawer-bg" id="drawerBg" onclick="closeSummary()"></div>
-<aside class="drawer" id="drawer">
-  <button class="x" onclick="closeSummary()">✕</button>
-  <h3>Total de tu pedido</h3><div class="hr"></div>
-  <div class="row"><span>1 artículo</span><a href="#">Editar la bolsa</a></div>
-  <div class="hr"></div>
-  <div class="row"><span>Subtotal</span><span>$97,997.00</span></div>
-  <div class="row"><span>Envíos</span><span>GRATIS</span></div>
-  <div class="hr"></div>
-  <div class="tot"><span>Tu total</span><span>$97,997.00</span></div>
-  <div class="dvat">Incluye el IVA de $13,517.52</div>
-  <h4>Detalles de tu pedido</h4>
-  <div class="det"><div class="h"><span>Entrega en:</span><a href="#">Cambiar</a></div><div class="v">Lun 13 Jul</div></div>
-  <div class="det"><div class="h"><span>Entregar a:</span><a href="#">Cambiar</a></div><div class="v">Av. Augusto de Lima</div></div>
-  <div class="det"><div class="h"><span>Pago</span></div></div>
-  <div class="det" style="border-bottom:0"><div class="h"><span>Revisión</span><a href="#">Ver</a></div></div>
-</aside>
+<footer><div class="wrap">Presales demo · Yuno SDK Lite · not a real payment flow.</div></footer>
+<div class="badge-y">Powered by <b>yuno</b> · SDK Lite</div>
 
 <!-- overlays -->
-<div class="ov" id="ov-proc"><div class="modal"><div class="spin"></div><div class="m-t" id="proc-t">Procesando el pago…</div><div class="m-p">Yuno está enrutando al mejor proveedor.</div></div></div>
+<div class="ov" id="ov-proc"><div class="modal"><div class="spin"></div><div class="m-t" id="proc-t">Processando…</div><div class="m-p" id="proc-p"></div></div></div>
 <div class="ov" id="ov-3ds"><div class="modal">
-  <div class="issuer"><span class="visa">VISA</span> · Autenticación del banco</div>
-  <div class="m-t">Verificación 3DS</div><div class="m-p">Ingresa el código enviado por SMS por tu banco emisor.</div>
+  <div class="issuer"><span class="visa">VISA</span> · 3DS</div>
+  <div class="m-t" id="d3-t">Verificação 3DS</div><div class="m-p" id="d3-p"></div>
   <div class="otp"><input maxlength="1" value="1"><input maxlength="1" value="2"><input maxlength="1" value="3"><input maxlength="1" value="4"><input maxlength="1" value="5"><input maxlength="1" value="6"></div>
-  <button class="m-btn" onclick="finish3ds()">Confirmar</button>
+  <button class="m-btn" onclick="finish3ds()" id="d3-btn">Confirmar</button>
 </div></div>
-<div class="ov" id="ov-red"><div class="modal">
-  <div class="spin"></div><div class="m-t" id="red-t"></div><div class="m-p" id="red-p"></div>
-  <button class="m-btn" onclick="redirectDone()" id="red-b">Simular confirmación</button>
+<div class="ov" id="ov-pix"><div class="modal">
+  <div class="m-t" id="px-t"></div><div class="m-p" id="px-p"></div>
+  <div style="width:170px;height:170px;margin:14px auto;border-radius:8px;background:repeating-conic-gradient(#111 0 25%,#fff 0 50%) 0 0/20px 20px"></div>
+  <div style="font-weight:700;color:var(--ip-blue)" id="px-count">04:59</div>
+  <button class="m-btn" onclick="pixPaid()" id="px-btn"></button>
 </div></div>
 <div class="ov" id="ov-ok"><div class="modal">
-  <div class="success-ic">✓</div><div class="m-t">¡Gracias por tu compra!</div>
-  <div class="m-p">Recibirás la confirmación de tu pedido por correo.</div>
-  <button class="m-btn" onclick="resetDemo()">Seguir comprando</button>
+  <div class="success-ic">✓</div><div class="m-t" id="ok-t"></div><div class="m-p" id="ok-p"></div>
+  <button class="m-btn" onclick="resetDemo()" id="ok-btn"></button>
 </div></div>
 
 <script>
+/* ================= config ================= */
+const CFG = {
+ BR:{ skin:'iplace', lang:'pt',
+   product:{name:'iPhone 17', desc:'Escolha a Cor: Azul-névoa<br>Escolha a Capacidade: 512GB', price:'R$ 6.999,00'},
+   tradein:{title:'Buyback', desc:'<b>Seu dispositivo:</b> iPhone 16 Pro 512GB<br><b>Valor estimado do seu Dispositivo:</b> −R$ 4.500,00<br><b>Valor da compra após o Buyback:</b> R$ 2.499,00'},
+   total:'R$ 6.999,00',
+   methods:[
+     {id:'PIX',name:'Pix',sub:'Aprovação em minutos',kind:'pix'},
+     {id:'CARD',name:'Cartão de crédito',kind:'card'},
+     {id:'TWO',name:'Dois Cartões de crédito',kind:'split'},
+     {id:'PIXCARD',name:'Pix + Cartão de crédito',kind:'split'},
+     {id:'VOUCHER',name:'Cartão Presente / Voucher',kind:'voucher'},
+   ],
+   L:{pay:'Pagamento',secure:'Todas as transações são seguras',sub:'Subtotal',disc:'Descontos',ship:'Frete',shipV:'A calcular',total:'Total',couponPh:'Cupom de desconto',apply:'Aplicar',finalize:'Finalizar compra',
+      cardH:'Dados do Cartão de crédito',ccnum:'Número do cartão*',ccname:'Nome impresso no cartão*',ccdoc:'CPF*',mm:'Validade/mês',yy:'Validade/ano',cvv:'Código de Segurança*',save:'Salvar dados do cartão para compras futuras',
+      proc:'Processando pagamento…',procS:'A Yuno está roteando para o melhor provedor.',
+      d3:'Verificação 3DS',d3s:'Digite o código enviado por SMS ao seu banco emissor.',d3b:'Confirmar',
+      pxt:'Pague com Pix para finalizar',pxp:'Escaneie o QR Code ou copie o código. Aprovação em minutos.',pxb:'Simular pagamento Pix',
+      okt:'Obrigado por comprar na iPlace',okp:'Pedido confirmado. Um e-mail com os detalhes será enviado a você.',okb:'Continuar comprando'},
+   legal:'Preços e condições exclusivos para o site www.iplace.com.br. iPlace é uma empresa Global Distribuição de Bens de Consumo Ltda — Grupo Herval (CNPJ 89.237.911/0001-40). Demo de presales — não processa pagamentos reais.' },
+
+ MX:{ skin:'apple', lang:'es', cfdi:true,
+   total:'$97,997.00', iva:'Incluye el IVA de $13,517.52',
+   summaryLink:'Mostrar resumen de pedido: $97,997.00',
+   nav:['Tienda','Mac','iPad','iPhone','Watch','AirPods','TV y Casa','Entretenimiento','Accesorios','Soporte'],
+   L:{sub:'Subtotal',ship:'Envíos',shipV:'GRATIS',total:'Tu total',
+      proc:'Procesando el pago…',procS:'Yuno está enrutando al mejor proveedor.',
+      d3:'Verificación 3DS',d3s:'Ingresa el código enviado por SMS por tu banco emisor.',d3b:'Confirmar',
+      okt:'¡Gracias por tu compra!',okp:'Recibirás la confirmación de tu pedido por correo.',okb:'Seguir comprando'} },
+
+};
+
+let C='BR', selected=null;
 const $=id=>document.getElementById(id);
+function esc(s){return s;}
 
-/* payment methods — card (Apple native) + Yuno-added methods, same UI */
-const METHODS=[
-  {id:'CARD', name:'Tarjeta de crédito o débito', sub:'Visa, MasterCard, AMEX', kind:'card'},
-  {id:'MP',   name:'Mercado Pago', sub:'Paga con tu cuenta o saldo', kind:'redirect',
-     note:'Serás redirigido a <b>Mercado Pago</b> para autorizar el pago de forma segura.'},
-  {id:'OXXO', name:'OXXO', sub:'Pago en efectivo', kind:'voucher',
-     note:'Recibirás un <b>código de barras</b> para pagar en cualquier tienda OXXO. El pedido se confirma al registrarse el pago.'},
-  {id:'SPEI', name:'Transferencia bancaria (SPEI)', sub:'CLABE interbancaria', kind:'redirect',
-     note:'Recibirás una <b>CLABE</b> para transferencia SPEI. El pedido se confirma al acreditarse la transferencia.'},
-  {id:'KUESKI', name:'Kueski Pay', sub:'Paga después, en quincenas', kind:'redirect',
-     note:'Serás redirigido a <b>Kueski Pay</b> para <b>pagar en quincenas</b> sin tarjeta.'},
-];
-let selected='CARD';
-
-function renderMethods(){
-  $('methods').innerHTML = METHODS.map(m=>`
-    <div class="ap-box${m.id===selected?' on':''}" data-m="${m.id}" onclick="pick('${m.id}')">
-      <div class="top"><div class="mtxt"><div class="t">${m.name}</div><div class="s">${m.sub}</div></div>${m.id==='CARD'?'<span class="brands"></span>':''}</div>
-    </div>
-    <div class="mcontent${m.id===selected?' on':''}" id="mc-${m.id}">${bodyFor(m)}</div>
-  `).join('');
+function setCountry(c){
+  C=c; selected=null;
+  document.querySelectorAll('.ctab').forEach(b=>b.classList.toggle('on',b.dataset.c===c));
+  const cfg=CFG[c]; document.documentElement.lang=cfg.lang==='pt'?'pt-BR':'es';
+  $('app').className = cfg.skin==='iplace'?'ip':'ap';
+  $('app').innerHTML = cfg.skin==='iplace'? renderIplace(cfg) : renderApple(cfg);
 }
-function bodyFor(m){
+
+/* ---------- iPlace skin ---------- */
+function renderIplace(cfg){
+  const L=cfg.L;
+  return `
+  <div class="promo"><a href="#">Confira acessórios para iPad</a></div>
+  <header class="hdr"><div class="wrap">
+    <img src="iplace-logo.png" alt="iPlace" style="height:74px;width:auto;display:block;margin:-12px -10px">
+    <img src="premium-partner.png" alt="Apple Premium Partner" style="height:56px;width:auto;display:block">
+    <svg class="bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg>
+  </div></header>
+  <div class="wrap"><div class="checkout">
+    <div class="left">
+      <h1 class="big">${L.pay}</h1>
+      <div style="color:var(--muted);font-size:14px;margin:-18px 0 22px">${L.secure}</div>
+      <div class="methods">${cfg.methods.map(m=>ipMethod(cfg,m)).join('')}</div>
+    </div>
+    <div class="right"><div class="right-inner">
+      ${sumRows(cfg)}
+      <div class="coupon"><input placeholder="${L.couponPh}"><button>${L.apply}</button></div>
+      <div class="totals">
+        <div class="r"><span>${L.sub}</span><span>${cfg.product.price}</span></div>
+        <div class="r"><span>${L.disc}</span><span>R$ 0,00</span></div>
+        <div class="r"><span>${L.ship}</span><span>${L.shipV}</span></div>
+        <div class="grand"><span>${L.total}</span><span>${cfg.total}</span></div>
+      </div>
+    </div></div>
+  </div></div>`;
+}
+function ipMethod(cfg,m){
+  const L=cfg.L; return `
+  <div class="method" data-id="${m.id}">
+    <div class="head" onclick="pick('${m.id}')"><span class="radio"></span>
+      <div><div class="m-name">${m.name}</div>${m.sub?`<div class="m-sub">${m.sub}</div>`:''}</div></div>
+    <div class="m-body">${ipBody(cfg,m)}</div>
+  </div>`;
+}
+function ipBody(cfg,m){
+  const L=cfg.L;
   if(m.kind==='card') return `
-    <div class="ap-lbl">Ingresa tu información de tarjeta:</div>
-    <input class="field" placeholder="Número de tarjeta de crédito/débito">
-    <div class="cardrow">
-      <input class="field" placeholder="Vencimiento MM/AA">
-      <div class="cvvwrap"><input class="field" placeholder="CVV"><span class="help-ic">?</span></div>
+    <div class="form-h">${L.cardH}</div>
+    <div class="cc-wrap"><input class="field" placeholder="${L.ccnum}" value="4111 1111 1111 1111"><span class="visa cc-badge">VISA</span></div>
+    <input class="field" placeholder="${L.ccname}">
+    <input class="field" placeholder="${L.ccdoc}">
+    <div class="frow2">
+      <input class="field" placeholder="Validade (MM/AA)" value="03/30">
+      <input class="field" placeholder="${L.cvv}" value="123">
+      <div class="card-illus">010101 <span style="color:#c00;border:1px solid #c00;border-radius:2px;padding:0 2px">123</span></div>
     </div>
+    <select class="field"><option>1x ${cfg.total}</option><option>6x</option><option>12x</option></select>
+    <label class="savecard"><input type="checkbox"> ${L.save}</label>
+    <button class="cta" onclick="pay('CARD')">${L.finalize}</button>`;
+  if(m.kind==='pix') return `
+    <div style="font-weight:700;font-size:15px;margin-bottom:10px">No método de pagamento via Pix, você pode pagar escaneando o QR Code ou Copiando e Colando o código.</div>
+    <div style="color:var(--ip-blue);font-weight:700">O código Pix e QR Code têm validade de 30 minutos.</div>
+    <div style="color:var(--muted);font-size:14px;margin:4px 0 14px">Se você não conseguir pagar até o prazo, o pedido será cancelado.</div>
+    <div style="font-weight:800;font-size:20px;margin-bottom:14px">${cfg.total} <span style="font-weight:500;font-size:14px;color:var(--muted)">pagamento à vista</span></div>
+    <button class="cta" onclick="pay('PIX')">${L.finalize}</button>`;
+  if(m.kind==='split') return `
+    <div style="color:var(--muted);font-size:14px;margin-bottom:10px">Divida o valor entre os métodos escolhidos.</div>
+    <input class="field" placeholder="Qual valor deseja pagar com o Cartão de crédito?">
+    <button class="cta" onclick="pay('CARD')">${L.finalize}</button>`;
+  if(m.kind==='voucher') return `
+    <input class="field" placeholder="Insira o código do Cartão Presente">
+    <button class="cta" onclick="pay('VOUCHER')">${L.finalize}</button>`;
+  return '';
+}
+
+/* ---------- Apple skin ---------- */
+function renderApple(cfg){
+  const L=cfg.L;
+  apSelected='CARD';
+  const AMETHODS=[
+    {id:'CARD',  name:'Tarjeta de crédito o débito', sub:'Visa, MasterCard, AMEX'},
+    {id:'MP',    name:'Mercado Pago', sub:'Paga con tu cuenta o saldo'},
+    {id:'OXXO',  name:'OXXO', sub:'Pago en efectivo'},
+    {id:'SPEI',  name:'Transferencia bancaria (SPEI)', sub:'CLABE interbancaria'},
+    {id:'KUESKI',name:'Kueski Pay', sub:'Paga después, en quincenas'},
+  ];
+  const NOTES={
+    MP:'Serás redirigido a <b>Mercado Pago</b> para autorizar el pago de forma segura.',
+    OXXO:'Recibirás un <b>código de barras</b> para pagar en cualquier tienda OXXO. El pedido se confirma al registrarse el pago.',
+    SPEI:'Recibirás una <b>CLABE</b> para transferencia SPEI. El pedido se confirma al acreditarse la transferencia.',
+    KUESKI:'Serás redirigido a <b>Kueski Pay</b> para <b>pagar en quincenas</b> sin tarjeta.',
+  };
+  const cardBody=`
+    <div class="ap-lbl">Ingresa tu información de tarjeta:</div>
+    <div class="cc-wrap"><input class="field" placeholder="Número de tarjeta de crédito/débito"><span class="visa cc-badge">VISA</span></div>
+    <div class="ap-cardrow"><input class="field" placeholder="Vencimiento MM/AA"><div class="ap-cvvwrap"><input class="field" placeholder="CVV"><span class="ap-help">?</span></div></div>
     <div class="ap-lbl">Opciones de pago:</div>
-    <select class="field"><option>1 pago de $97,997.00</option><option>3 meses sin intereses</option><option>6 meses sin intereses</option><option>12 meses sin intereses</option><option>18 meses sin intereses</option></select>`;
-  return `<div class="note-box">${m.note}</div>`;
+    <select class="field"><option>1 pago de ${cfg.total}</option><option>3 meses sin intereses</option><option>6 meses sin intereses</option><option>12 meses sin intereses</option><option>18 meses sin intereses</option></select>`;
+  const methodsHtml=AMETHODS.map(m=>`
+    <div class="ap-box${m.id==='CARD'?' on':''}" data-m="${m.id}" onclick="pickAp('${m.id}')">
+      <div class="t">${m.name}</div><div class="s">${m.sub}</div>
+    </div>
+    <div class="mcontent${m.id==='CARD'?' on':''}" id="mc-${m.id}">${m.id==='CARD'?cardBody:`<div class="note-box">${NOTES[m.id]}</div>`}</div>`).join('');
+  return `
+  <div class="apnav"><div class="wrap">
+    <span class="apple"></span>
+    ${cfg.nav.map(n=>`<a href="#">${n}</a>`).join('')}
+    <span class="sp"></span>
+    <a href="#">⌕</a><a href="#">▢</a>
+  </div></div>
+  <div class="wrap"><div class="payhead"><h2>Pagar</h2><a href="#" onclick="openSummary();return false">${cfg.summaryLink}</a></div></div>
+  <div class="wrap"><div class="ap-checkout">
+    <h1 class="big">¿Cómo quieres pagar?</h1>
+    <div class="sec-h">Método de pago.<span class="fin">Compara las opciones de financiamiento ⊕</span></div>
+    ${methodsHtml}
+
+    <div class="ap-divider"></div>
+    <div class="sec-h" style="font-size:19px">Dirección de facturación</div>
+    <div class="field-wrap"><span class="flab">País/región</span><input class="field flab-pad" value="México"></div>
+    <input class="field" placeholder="Nombre">
+    <input class="field" placeholder="Apellidos">
+    <input class="field" placeholder="Dirección (calle)">
+    <input class="field" placeholder="Depto, suite, código de acceso (opcional)">
+    <input class="field" placeholder="Colonia">
+    <input class="field" placeholder="Ciudad">
+    <div class="addrgrid">
+      <select class="field ap-state"><option>estado</option><option>Ciudad de México</option><option>Jalisco</option><option>Nuevo León</option><option>Estado de México</option><option>Puebla</option><option>Querétaro</option></select>
+      <input class="field" placeholder="Código postal">
+    </div>
+
+    <div class="ap-divider"></div>
+    <div class="sec-h" style="font-size:24px">Facturación Electrónica.</div>
+    <div class="ap-box on" onclick="pickCfdi(this)"><div class="t">Sin CFDI</div><div class="s">Selecciona si no necesitas un CFDI para esta compra</div></div>
+    <div class="ap-box" onclick="pickCfdi(this)"><div class="t">CFDI</div><div class="s">Selecciona si sí necesitas un CFDI para esta compra</div></div>
+
+    <div style="margin-top:26px"><button class="ap-cta" onclick="pay(apSelected)">Revisar tu pedido</button></div>
+
+    <div class="help-line">¿Necesitas más ayuda? <a href="#">Chatea ahora</a> o llama al 001-800-692-7753.</div>
+    <div class="faq" id="faq">
+      <div class="q" onclick="document.getElementById('faq').classList.toggle('open')"><h3>Preguntas frecuentes de pago</h3><span class="chev">⌄</span></div>
+      <div class="a">
+        <p><b>¿Qué métodos de pago aceptan?</b><br>Tarjeta de crédito o débito (Visa, MasterCard, AMEX), y ahora también Mercado Pago, OXXO, SPEI y Kueski Pay.</p>
+        <p style="margin-top:10px"><b>¿Puedo pagar en mensualidades sin intereses (MSI)?</b><br>Sí, con tarjetas participantes puedes elegir el número de pagos durante el checkout.</p>
+      </div>
+    </div>
+    <div class="ap-footnote">* Precios incluyen IVA (16%); no incluyen cargos de envío (salvo se indique lo contrario). El formulario del pedido muestra el IVA por pagar para los productos que selecciones.</div>
+  </div></div>
+
+  <div class="drawer-bg" id="drawerBg" onclick="closeSummary()"></div>
+  <aside class="drawer" id="drawer">
+    <button class="x" onclick="closeSummary()">✕</button>
+    <h3>Total de tu pedido</h3>
+    <div class="hr"></div>
+    <div class="row"><span>1 artículo</span><a href="#">Editar la bolsa</a></div>
+    <div class="hr"></div>
+    <div class="row"><span>${L.sub}</span><span>${cfg.total}</span></div>
+    <div class="row"><span>${L.ship}</span><span>${L.shipV}</span></div>
+    <div class="hr"></div>
+    <div class="tot"><span>${L.total}</span><span>${cfg.total}</span></div>
+    <div class="dvat">${cfg.iva||''}</div>
+    <h4>Detalles de tu pedido</h4>
+    <div class="det"><div class="h"><span>Entrega en:</span><a href="#">Cambiar</a></div><div class="v">Lun 13 Jul</div></div>
+    <div class="det"><div class="h"><span>Entregar a:</span><a href="#">Cambiar</a></div><div class="v">Av. Augusto de Lima</div></div>
+    <div class="det"><div class="h"><span>Pago</span></div></div>
+    <div class="det" style="border-bottom:0"><div class="h"><span>Revisión</span><a href="#">Ver</a></div></div>
+  </aside>`;
 }
-function pick(id){
-  selected=id;
+
+function sumRows(cfg){
+  return `
+  <div class="sum-row">
+    <div class="sum-thumb"><span class="qty">1</span>📱</div>
+    <div class="sum-info"><div class="t">${cfg.product.name}</div><div class="d">${cfg.product.desc}</div></div>
+    <div class="sum-price">${cfg.product.price}</div>
+  </div>
+  <div class="sum-row">
+    <div class="sum-thumb"><span class="qty">1</span>↻</div>
+    <div class="sum-info"><div class="t">${cfg.tradein.title}</div><div class="d">${cfg.tradein.desc}</div></div>
+  </div>`;
+}
+
+/* ---------- interactions ---------- */
+function pick(id){ selected=id; document.querySelectorAll('.method').forEach(el=>el.classList.toggle('sel',el.dataset.id===id)); }
+let apSelected='CARD';
+function pickAp(id){ apSelected=id;
   document.querySelectorAll('.ap-box[data-m]').forEach(el=>el.classList.toggle('on',el.dataset.m===id));
-  document.querySelectorAll('.mcontent').forEach(el=>el.classList.toggle('on',el.id==='mc-'+id));
-}
-function pickCfdi(el){ el.parentElement.querySelectorAll('.ap-box').forEach(b=>{ if(b.querySelector('.t') && (b.textContent.includes('CFDI'))) b.classList.remove('on'); }); el.classList.add('on'); }
-
-/* flow */
-function show(id){$(id).classList.add('show')} function hide(id){$(id).classList.remove('show')}
-function hideAll(){['ov-proc','ov-3ds','ov-red','ov-ok'].forEach(hide)}
-function pay(){
-  const m=METHODS.find(x=>x.id===selected);
-  show('ov-proc');
-  setTimeout(()=>{ hide('ov-proc');
-    if(m.kind==='card'){ show('ov-3ds'); }
-    else { $('red-t').textContent=(m.id==='OXXO'?'Genera tu código OXXO':'Completa tu pago'); $('red-p').innerHTML=m.note; $('red-b').textContent=(m.id==='OXXO'?'Simular pago en OXXO':'Simular confirmación'); show('ov-red'); }
-  },1200);
-}
-function finish3ds(){ hide('ov-3ds'); show('ov-proc'); setTimeout(()=>{hide('ov-proc');show('ov-ok');},900); }
-function redirectDone(){ hide('ov-red'); show('ov-proc'); setTimeout(()=>{hide('ov-proc');show('ov-ok');},900); }
-function resetDemo(){ hideAll(); window.scrollTo({top:0,behavior:'smooth'}); }
-
+  document.querySelectorAll('.mcontent').forEach(el=>el.classList.toggle('on',el.id==='mc-'+id)); }
+function pickCfdi(el){ document.querySelectorAll('.ap-checkout .ap-box:not([data-m])').forEach(b=>b.classList.remove('on')); el.classList.add('on'); }
 function openSummary(){ $('drawer').classList.add('show'); $('drawerBg').classList.add('show'); }
 function closeSummary(){ $('drawer').classList.remove('show'); $('drawerBg').classList.remove('show'); }
 
-renderMethods();
+function show(id){$(id).classList.add('show')} function hide(id){$(id).classList.remove('show')}
+function hideAll(){['ov-proc','ov-3ds','ov-pix','ov-ok'].forEach(hide)}
+let pixTimer=null;
+function pay(method){
+  const L=CFG[C].L;
+  $('proc-t').textContent=L.proc; $('proc-p').textContent=L.procS; show('ov-proc');
+  setTimeout(()=>{ hide('ov-proc');
+    if(method==='CARD'){ $('d3-t').textContent=L.d3; $('d3-p').textContent=L.d3s; $('d3-btn').textContent=L.d3b; show('ov-3ds'); }
+    else if(method==='PIX'){ $('px-t').textContent=L.pxt; $('px-p').textContent=L.pxp; $('px-btn').textContent=L.pxb; pixCountdown(); show('ov-pix'); }
+    else success();
+  },1200);
+}
+function finish3ds(){ hide('ov-3ds'); const L=CFG[C].L; $('proc-t').textContent=L.proc; $('proc-p').textContent='3DS ✓'; show('ov-proc'); setTimeout(()=>{hide('ov-proc');success();},900); }
+function pixCountdown(){ let s=299; clearInterval(pixTimer); pixTimer=setInterval(()=>{s--;$('px-count').textContent=`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;if(s<=0)clearInterval(pixTimer);},1000); }
+function pixPaid(){ clearInterval(pixTimer); hide('ov-pix'); success(); }
+function success(){ const L=CFG[C].L; $('ok-t').textContent=L.okt; $('ok-p').textContent=L.okp; $('ok-btn').textContent=L.okb; show('ov-ok'); }
+function resetDemo(){ hideAll(); selected=null; window.scrollTo({top:0,behavior:'smooth'}); }
+
+setCountry('BR');
 </script>
 </body>
 </html>
